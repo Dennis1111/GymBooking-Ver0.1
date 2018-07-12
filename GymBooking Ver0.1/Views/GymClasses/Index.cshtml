@@ -3,13 +3,22 @@
 
 @{
     ViewBag.Title = "Index";
+    ViewBag.ShowAll = false;
 }
-
 <h2>Index</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+@if (@ViewBag.bookedGym == "All")
+{
+    @Html.ActionLink("All", "Index", new { bookedgym= "Booked" }, new { @class = "btn btn-primary btn-large" })
+}
+else
+{
+    @Html.ActionLink("Booked", "Index", new { bookedgym = "All" }, new { @class = "btn btn-primary btn-large" })
+}
 
 <table class="table">
     <tr>
@@ -32,42 +41,41 @@
     {
         if (item.EndTime > DateTime.Now)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Duration)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @if (User.IsInRole("admin"))
-                {
-
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) <span>| </span>
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) <span>| </span>
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }) <span>| </span>
-                }
-
-                @if (User.Identity.IsAuthenticated)
-                {
-                    var userId = User.Identity.GetUserId();
-                    if (item.AttendingMembers.Any(a => a.Id == userId))
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Duration)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @if (User.IsInRole("Admin"))
                     {
-                        @Html.ActionLink("Book Off", "BookingToggle", new { id = item.Id })
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) <span>| </span>
+                        @Html.ActionLink("Details", "Details", new { id = item.Id }) <span>| </span>
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }) <span>| </span>
                     }
-                    else
+
+                    @if (User.Identity.IsAuthenticated)
                     {
-                        @Html.ActionLink("Book", "BookingToggle", new { id = item.Id })
+                        var userId = User.Identity.GetUserId();
+                        if (item.AttendingMembers.Any(a => a.Id == userId))
+                        {
+                            @Html.ActionLink("Book Off", "BookingToggle", new { id = item.Id })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Book", "BookingToggle", new { id = item.Id })
+                        }
                     }
-                }
-            </td>
-        </tr>
+                </td>
+            </tr>
         }
     }
 </table>

@@ -201,6 +201,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807120819423_AttendingClasses.cs" />
+    <Compile Include="Migrations\201807120819423_AttendingClasses.Designer.cs">
+      <DependentUpon>201807120819423_AttendingClasses.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\GymClass.cs" />
     <Compile Include="Migrations\201807101208401_first.cs" />
     <Compile Include="Migrations\201807101208401_first.Designer.cs">
@@ -283,6 +287,7 @@
     <Content Include="Views\GymClasses\Edit.cshtml" />
     <Content Include="Views\GymClasses\Index.cshtml" />
     <Content Include="Views\GymClasses\History.cshtml" />
+    <Content Include="Views\GymClasses\BookedPasses.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -309,6 +314,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807110731013_applicationuserReq.resx">
       <DependentUpon>201807110731013_applicationuserReq.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807120819423_AttendingClasses.resx">
+      <DependentUpon>201807120819423_AttendingClasses.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

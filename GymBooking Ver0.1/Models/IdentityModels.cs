@@ -20,7 +20,7 @@ namespace GymBooking_Ver0._1.Models
         [Required]
         public DateTime TimeOfRegistration { get; set; }
 
-        public virtual ICollection<ApplicationUser> AttendingMembers { get; set; }
+        public virtual ICollection<GymClass> AttendingClasses { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -34,7 +34,8 @@ namespace GymBooking_Ver0._1.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<GymClass> GymClasses { get; set; }
-
+       
+            
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {

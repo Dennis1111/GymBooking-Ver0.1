@@ -1,6 +1,5 @@
 ﻿@model IEnumerable<GymBooking_Ver0._1.Models.GymClass>
-
-<h2>Dina tidigare pass</h2>
+<h2>Dina bokade pass</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -38,6 +37,5 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
         </tr>
-
     }
 </table>

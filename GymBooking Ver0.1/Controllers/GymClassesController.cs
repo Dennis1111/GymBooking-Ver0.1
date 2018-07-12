@@ -1,4 +1,4 @@
-﻿
+﻿using System;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
@@ -15,7 +15,8 @@ namespace GymBooking_Ver0._1.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         [Authorize]
-        public ActionResult BookingToggle(int id) {
+        public ActionResult BookingToggle(int id)
+        {
             GymClass CurrentClass = db.GymClasses.Where(g => g.Id == id).FirstOrDefault();
             ApplicationUser CurrentUser = db.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
 
@@ -24,27 +25,56 @@ namespace GymBooking_Ver0._1.Controllers
                 CurrentClass.AttendingMembers.Remove(CurrentUser);
                 db.SaveChanges();
             }
-            else {
+            else
+            {
                 CurrentClass.AttendingMembers.Add(CurrentUser);
                 db.SaveChanges();
             }
-            return RedirectToAction("Index");                
+            return RedirectToAction("Index");
         }
 
-        // GET: GymClasses
+        // GET: GymClasses           
         public ActionResult History()
         {
-            var userId = User.Identity.GetUserId();
-
-            return View(db.GymClasses.Where(g => g.Id == userId).ToList()); 
+            var userIdentity = User.Identity.GetUserId();
+            var user = db.Users.Single(u => u.Id == userIdentity);
+            var attendedClasses = user.AttendingClasses.Where(a => a.EndTime < DateTime.Now).ToList();
+            return View(attendedClasses);
         }
-
 
         // GET: GymClasses
-        public ActionResult Index()
+        public ActionResult BookedPasses()
         {
-            return View(db.GymClasses.ToList());
+            var userIdentity = User.Identity.GetUserId();
+            var user = db.Users.Single(u => u.Id == userIdentity);
+            var attendedClasses = user.AttendingClasses.Where(a => a.EndTime >= DateTime.Now).ToList();
+            return View(attendedClasses);
         }
+
+        // GET: GymClasses
+
+        public ActionResult Index(string bookedgym)
+        {
+            var test = db.GymClasses.ToList().Where(g => g.EndTime > DateTime.Now);
+
+            if (bookedgym != null)
+            {
+                ViewBag.bookedGym = bookedgym;
+            }
+            else
+            {
+                ViewBag.bookedGym = "Book";
+            }
+
+            if (ViewBag.bookedGym == "Book")
+            {
+                var gymClasses = db.GymClasses.ToList().Where(g => g.EndTime > DateTime.Now).ToList();
+                return View(gymClasses);
+            }
+            else
+                return View(db.GymClasses.ToList());
+        }
+
 
         // GET: GymClasses/Details/5
         public ActionResult Details(int? id)
@@ -89,7 +119,7 @@ namespace GymBooking_Ver0._1.Controllers
         }
 
         // GET: GymClasses/Edit/5
-        [Authorize(Roles= "Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
