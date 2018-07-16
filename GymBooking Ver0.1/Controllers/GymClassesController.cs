@@ -4,9 +4,10 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+//using System.Web.Http;
+
 using GymBooking_Ver0._1.Models;
 using Microsoft.AspNet.Identity;
-
 
 namespace GymBooking_Ver0._1.Controllers
 {
@@ -52,11 +53,14 @@ namespace GymBooking_Ver0._1.Controllers
         }
 
         // GET: GymClasses
-
-        public ActionResult Index(string bookedgym)
+        public ActionResult Index(string bookedgym,string searchTerm)
         {
-            var test = db.GymClasses.ToList().Where(g => g.EndTime > DateTime.Now);
+            //var test = db.GymClasses.ToList().Where(g => g.EndTime > DateTime.Now);
 
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_GymPasses", db.GymClasses.ToList());
+            }
             if (bookedgym != null)
             {
                 ViewBag.bookedGym = bookedgym;
@@ -74,7 +78,6 @@ namespace GymBooking_Ver0._1.Controllers
             else
                 return View(db.GymClasses.ToList());
         }
-
 
         // GET: GymClasses/Details/5
         public ActionResult Details(int? id)

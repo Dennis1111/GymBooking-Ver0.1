@@ -35,20 +35,28 @@ namespace GymBooking_Ver0._1.Migrations
 
             var userStore = new UserStore<ApplicationUser>(db);
             var userManager = new UserManager<ApplicationUser>(userStore);
-            var emails = new[] { "admin@gymbokning.se"};
+            var users = new[] { new ApplicationUser { UserName = "admin@gymbokning.se", Email = "admin@gymbokning.se", FirstName = "Admin", LastName = "Istrator", TimeOfRegistration = DateTime.Now},
+                                new ApplicationUser { UserName = "dennis@gymbokning.se", Email = "dennis@gymbokning.se", FirstName = "Dennis", LastName = "Nilsson", TimeOfRegistration = DateTime.Now},
+                                new ApplicationUser { UserName = "robert@gymbokning.se", Email = "robert@gmail.se", FirstName = "Robert", LastName = "Hansson", TimeOfRegistration = DateTime.Now}};
 
-            foreach (var email in emails)
+            var passwords = new[] { "AdMin1!", "passWord2!" };
+            var emails = new[] { "admin@gymbokning.se"};
+            int count = 0;
+
+            foreach (var user in users)
             {
-                if (db.Users.Any(u => u.UserName == email)) continue;
-                var user = new ApplicationUser { UserName = email, Email = email , FirstName = "Dennis",LastName = "Nilsson",TimeOfRegistration= DateTime.Now};
-                var result = userManager.Create(user, "password");
+                Console.WriteLine("Seed user"+user.UserName);
+                if (db.Users.Any(u => u.UserName == user.UserName)) continue;
+                var result = userManager.Create(user, passwords[count]);
                 if (!result.Succeeded)
                 { throw new Exception(string.Join("\n", result.Errors)); }
+                count++;
             }
 
             var adminUser = userManager.FindByName("admin@gymbokning.se");
-            userManager.AddToRole(adminUser.Id, "Admin");          
+            userManager.AddToRole(adminUser.Id, "Admin");
 
+          
         }
     }
 }
