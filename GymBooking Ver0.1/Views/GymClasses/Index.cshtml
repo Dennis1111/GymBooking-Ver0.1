@@ -1,7 +1,6 @@
 ﻿@model IEnumerable<GymBooking_Ver0._1.Models.GymClass>
 @using Microsoft.AspNet.Identity;
 
-
 @{
     ViewBag.Title = "Index";
     ViewBag.ShowAll = false;
@@ -18,16 +17,15 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 
-
 @using (Ajax.BeginForm(
     new AjaxOptions
     {
-        HttpMethod = "get",
+        HttpMethod = "post",
         InsertionMode = InsertionMode.Replace,
-        UpdateTargetId = "gympasses"
+        UpdateTargetId = "gymbookings"
     }))
 {
-    <input type="search" , value="searchTerm" />
+    <input type="search" , value="enter name", name="name" ,id="name"/>
     <input type="submit" , value="Search by Name" />
 }
 
